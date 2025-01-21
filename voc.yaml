@@ -1,0 +1,5 @@
+train: C:\Users\94772\Desktop\projects\ai sprint\datasets\pascal_voc\images
+val: C:\Users\94772\Desktop\projects\ai sprint\datasets\pascal_voc\images
+
+nc: 8  # Number of classes
+names: ['person', 'helmet', 'vest', 'forklift', 'pallet_jack', 'box', 'damaged_box', 'falling_goods']
