@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Warehouse Safety Analytics</h1>
+    </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/analytics">Analytics</a>
+    </nav>
+    <div class="analytics-container">
+        <h3>Violation Summary and High-Risk Areas</h3>
+        <div class="analytics-charts">
+            <div class="chart">
+                <h4>Violation Summary</h4>
+                <img src="data:image/png;base64,{{ violation_chart }}" alt="Safety Violations Chart">
+            </div>
+            <div class="chart">
+                <h4>High-Risk Areas</h4>
+                <img src="data:image/png;base64,{{ heatmap_chart }}" alt="Warehouse Risk Heatmap">
+            </div>
+        </div>
+    </div>
+    <div class="chart">
+        <h4>Incident Prediction</h4>
+        <img src="data:image/png;base64,{{ prediction_chart }}" alt="Incident Prediction Chart">
+    </div>
+    <div class="chart">
+        <h4>Drunk Behavior Detection</h4>
+        <img src="data:image/png;base64,{{ violation_chart }}" alt="Violation Summary">
+    </div>
+    
+</body>
+</html>

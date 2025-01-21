@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Monitoring Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Function to fetch IoT readings and update the UI
+        async function updateIoTReadings() {
+            const response = await fetch('/iot_readings');
+            const data = await response.json();
+
+            // Update temperature, air quality, and alcohol level
+            document.getElementById('temperature').innerText = `${data.temperature}°C`;
+            document.getElementById('air-quality').innerText = data.air_quality;
+            document.getElementById('alcohol-level').innerText = `${data.alcohol_level} % BAC`;
+
+            // Update warnings and recommendations
+            const warningsDiv = document.getElementById('recommendations');
+            warningsDiv.innerHTML = ""; // Clear existing recommendations
+            if (data.recommendations.length > 0) {
+                data.recommendations.forEach(rec => {
+                    const recItem = document.createElement('p');
+                    recItem.className = "warning";
+                    recItem.innerText = `⚠️ ${rec}`;
+                    warningsDiv.appendChild(recItem);
+                });
+            } else {
+                warningsDiv.innerHTML = "<p class='good'>All conditions are normal.</p>";
+            }
+        }
+
+        // Refresh IoT readings every 5 seconds
+        setInterval(updateIoTReadings, 5000);
+        window.onload = updateIoTReadings;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Warehouse Monitoring Dashboard</h1>
+    </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/analytics">Analytics</a>
+    </nav>
+    <main>
+        <!-- Video Monitoring Section -->
+        <section id="video-container">
+            <h2>CCTV Monitoring</h2>
+            <div class="video-section">
+                <h3>Warehouse Area</h3>
+                <img id="video-warehouse" src="{{ url_for('video_feed_warehouse') }}" alt="Warehouse CCTV Feed" width="720" height="480">
+            </div>
+            <div class="video-section">
+                <h3>Storage Area</h3>
+                <img id="video-storage" src="{{ url_for('video_feed_storage') }}" alt="Storage CCTV Feed" width="720" height="480">
+            </div>
+        </section>
+
+        <!-- IoT Readings Section -->
+        <section id="iot-readings">
+            <h2>Sensor Readings</h2>
+            <p><strong>Temperature:</strong> <span id="temperature">Loading...</span></p>
+            <p><strong>Air Quality:</strong> <span id="air-quality">Loading...</span></p>
+            <p><strong>Alcohol Level:</strong> <span id="alcohol-level">Loading...</span></p>
+            <div id="recommendations">
+                <p>Loading recommendations...</p>
+            </div>
+        </section>
+
+        <!-- Safety Alerts Section -->
+        <section id="safety-alerts">
+            <h2>Safety Alerts</h2>
+            <ul>
+                {% for alert in alerts %}
+                <li class="alert">
+                    ⚠️ {{ alert.message }} (Severity: {{ alert.severity }})
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
